@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmZone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e8eaed;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        .app-header {
+            padding: 24px 24px 0;
+            display: flex;
+            gap: 24px;
+        }
+
+        .app-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 20px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: 28px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 4px;
+        }
+
+        .app-subtitle {
+            font-size: 14px;
+            color: #01875f;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .app-tagline {
+            font-size: 13px;
+            color: #5f6368;
+        }
+
+        .stats-row {
+            display: flex;
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+            text-align: center;
+        }
+
+        .stat-item {
+            flex: 1;
+            border-right: 1px solid #e8eaed;
+        }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #202124;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .star {
+            color: #01875f;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .notice-box {
+            margin: 16px 24px;
+            padding: 16px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .notice-box strong {
+            color: #856404;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .notice-box a {
+            color: #01875f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .notice-box a:hover {
+            text-decoration: underline;
+        }
+
+        .install-button {
+            margin: 16px 24px;
+            background-color: #01875f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            width: calc(100% - 48px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .install-button:hover {
+            background-color: #017a55;
+        }
+
+        .ad-container {
+            margin: 16px 24px;
+            text-align: center;
+            display: none;
+            overflow: hidden;
+        }
+
+        .ad-container.show {
+            display: block;
+        }
+
+        .ad-notice {
+            font-size: 11px;
+            color: #5f6368;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            padding: 0 24px 16px;
+            gap: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: #01875f;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .screenshots-section {
+            padding: 24px;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .screenshots-scroll {
+            display: inline-flex;
+            gap: 12px;
+        }
+
+        .screenshot {
+            width: 180px;
+            height: 320px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: #fff;
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-section {
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .arrow {
+            color: #5f6368;
+            font-size: 20px;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 20px;
+            color: #5f6368;
+            margin-bottom: 8px;
+        }
+
+        .updated-date {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 16px;
+        }
+
+        .safety-section {
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .safety-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .safety-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .safety-icon {
+            font-size: 24px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        .safety-text {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 20px;
+        }
+
+        .ratings-section {
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .rating-summary {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .rating-number {
+            font-size: 56px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .rating-stars {
+            color: #01875f;
+            font-size: 16px;
+        }
+
+        .rating-count {
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 8px;
+        }
+
+        .comment-section {
+            padding: 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .comment-form {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comment-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-name-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e8eaed;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e8eaed;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Roboto', Arial, sans-serif;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .comment-submit-btn {
+            align-self: flex-start;
+            padding: 10px 24px;
+            background-color: #01875f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .comment-submit-btn:hover {
+            background-color: #017a55;
+        }
+
+        .comments-list {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .comment-item {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #01875f;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .comment-author {
+            font-weight: 500;
+            color: #202124;
+            font-size: 14px;
+        }
+
+        .comment-date {
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 40px 0;
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        .info-section {
+            padding: 24px;
+        }
+
+        .info-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-item {
+            font-size: 14px;
+            color: #5f6368;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .info-link {
+            color: #01875f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .info-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            padding: 24px;
+            border-top: 1px solid #e8eaed;
+            font-size: 14px;
+            color: #01875f;
+        }
+
+        @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- App Header -->
+        <div class="app-header">
+            <div class="app-icon">
+                <img src="icon.png" alt="FarmZone Icon">
+            </div>
+            <div class="app-info">
+                <div class="app-name">FarmZone</div>
+                <div class="app-subtitle">FZ Network </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-item">
+                <div class="stat-value">
+                    New
+                </div>
+                <div class="stat-label">Just Released</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="downloadCount">0</div>
+                <div class="stat-label">Downloads</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">18+</div>
+                <div class="stat-label">Rated for 18+</div>
+            </div>
+        </div>
+
+        <!-- Important Notice -->
+        <div class="notice-box">
+            <strong>⚠️ Important Notice:</strong>
+            • This app is not available on Google Play Store<br>
+            • You need to enable "Install from Unknown Sources" in your device settings<br>
+            • This is an Ad Revenue Sharing Platform - you earn by watching ads<br>
+            • Read our <a href="https://farmtoken22.github.io/FarmToken.io/usage-policy.html" target="_blank">Privacy Policy & Terms</a> before installing
+        </div>
+
+        <!-- Install Button -->
+        <button class="install-button" id="downloadBtn">
+            Download APK<br>
+            <small style="font-size: 11px; font-weight: 400;">Click to download from GitHub</small>
+        </button>
+
+        <!-- Ad Container with Notice -->
+        <div class="ad-notice">Ad supports our platform</div>
+        <div class="ad-container" id="adContainer">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '78ade24182729fceea8e45203dad915b',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/78ade24182729fceea8e45203dad915b/invoke.js"></script>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn">Share</button>
+            <button class="action-btn">Add to Wishlist</button>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="screenshots-section">
+            <div class="screenshots-scroll">
+                <div class="screenshot">
+                    <img src="screenshot1.png" alt="Screenshot 1">
+                </div>
+                <div class="screenshot">
+                    <img src="screenshot2.png" alt="Screenshot 2">
+                </div>
+                <div class="screenshot">
+                    <img src="screenshot3.png" alt="Screenshot 3">
+                </div>
+                <div class="screenshot">
+                    <img src="screenshot4.png" alt="Screenshot 4">
+                </div>
+            </div>
+        </div>
+
+        <!-- About -->
+        <div class="about-section">
+            <div class="section-title">
+                About this app
+                <span class="arrow">→</span>
+            </div>
+            <div class="description">
+                <strong>Welcome to FarmZone</strong>, an ad revenue sharing platform where you can earn by watching ads and completing simple tasks!
+            </div>
+            <div class="description">
+                <strong>How It Works:</strong>
+            </div>
+            <div class="description">
+                • Watch ads and earn points daily<br>
+                • Complete simple tasks for bonus points<br>
+                • Stay active to unlock daily bonuses<br>
+                • Connect with the FarmZone community<br>
+                • Track your progress and earnings
+            </div>
+            <div class="description" style="margin-top: 16px;">
+                <strong>Important:</strong> FarmZone is an ad revenue sharing platform. You earn by watching advertisements. Points can be converted based on ad revenue. This is NOT cryptocurrency or gambling.
+            </div>
+            <div class="description">
+                <strong>Backend:</strong> Powered by Firebase for secure data management.
+            </div>
+            <div class="description">
+                For full terms, privacy policy, and how we handle your data, visit: <a href="https://farmtoken22.github.io/FarmToken.io/usage-policy.html" target="_blank" class="info-link">Usage Policy</a>
+            </div>
+            <div class="updated-date">
+                Updated on<br>
+                November 20, 2025
+            </div>
+        </div>
+
+        <!-- Data Safety -->
+        <div class="safety-section">
+            <div class="section-title">
+                Data safety
+                <span class="arrow">→</span>
+            </div>
+            <div class="safety-items">
+                <div class="safety-item">
+                    <div class="safety-icon">🔗</div>
+                    <div class="safety-text">
+                        This app shows third-party advertisements for revenue sharing<br>
+                        Ad providers may collect device identifiers
+                    </div>
+                </div>
+                <div class="safety-item">
+                    <div class="safety-icon">☁️</div>
+                    <div class="safety-text">
+                        Data collected: Device ID, Activity logs (for earnings calculation)<br>
+                        Stored securely in Firebase
+                    </div>
+                </div>
+                <div class="safety-item">
+                    <div class="safety-icon">🔒</div>
+                    <div class="safety-text">
+                        Data is encrypted in transit using Firebase security
+                    </div>
+                </div>
+                <div class="safety-item">
+                    <div class="safety-icon">🗑️</div>
+                    <div class="safety-text">
+                        You can request data deletion anytime through app settings
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ratings & Reviews -->
+        <div class="ratings-section">
+            <div class="section-title">
+                Ratings and reviews
+                <span class="arrow">→</span>
+            </div>
+            <div class="rating-summary">
+                <div>
+                    <div class="rating-number">New</div>
+                    <div class="rating-count">Be the first to review!</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 40px 0; color: #5f6368;">
+                <p>No reviews yet. Download and be the first to share your experience!</p>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <div class="section-title">
+                User Comments
+            </div>
+            
+            <div class="comment-form">
+                <div class="comment-input-group">
+                    <input type="text" id="commentName" class="comment-name-input" placeholder="Your name" maxlength="50">
+                </div>
+                <textarea id="commentText" class="comment-textarea" placeholder="Share your thoughts about FarmZone..." maxlength="500"></textarea>
+                <button class="comment-submit-btn" id="submitComment">Post Comment</button>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <div class="no-comments">Loading comments...</div>
+            </div>
+        </div>
+
+        <!-- App Info -->
+        <div class="info-section">
+            <div class="section-title">
+                More Information
+            </div>
+            <div class="info-items">
+                <div class="info-item">
+                    <strong>Privacy Policy:</strong><br>
+                    <a href="https://farmtoken22.github.io/FarmToken.io/usage-policy.html" target="_blank" class="info-link">View Full Policy</a>
+                </div>
+                <div class="info-item">
+                    <strong>Category:</strong> Productivity / Rewards
+                </div>
+                <div class="info-item">
+                    <strong>Age Rating:</strong> 18+ (Contains ads and revenue sharing)
+                </div>
+                <div class="info-item">
+                    <strong>Backend:</strong> Firebase (Google Cloud)
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-links">
+            <a href="https://farmtoken22.github.io/FarmToken.io/usage-policy.html" target="_blank" style="color: #01875f; text-decoration: none;">Terms & Privacy</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, push, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBvIElQamN_gbd_fQKJLB7AIchih7C0eIs",
+            authDomain: "download-76d67.firebaseapp.com",
+            databaseURL: "https://download-76d67-default-rtdb.firebaseio.com",
+            projectId: "download-76d67",
+            storageBucket: "download-76d67.firebasestorage.app",
+            messagingSenderId: "987629057578",
+            appId: "1:987629057578:web:bcfbbf64a8ca53995a3553",
+            measurementId: "G-0CGVV4REQR"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Download Counter with Firebase
+        const downloadCountRef = ref(database, 'downloads/count');
+        
+        // Listen for download count changes in real-time
+        onValue(downloadCountRef, (snapshot) => {
+            const count = snapshot.val() || 0;
+            const downloadCountEl = document.getElementById('downloadCount');
+            
+            if (count === 0) {
+                downloadCountEl.textContent = 'New';
+            } else if (count < 100) {
+                downloadCountEl.textContent = count;
+            } else if (count < 1000) {
+                downloadCountEl.textContent = count + '+';
+            } else {
+                downloadCountEl.textContent = (Math.floor(count / 1000)) + 'K+';
+            }
+        });
+
+        // Comments with Firebase
+        const commentsRef = ref(database, 'comments');
+        
+        // Load comments in real-time
+        onValue(commentsRef, (snapshot) => {
+            const commentsList = document.getElementById('commentsList');
+            const commentsData = snapshot.val();
+            
+            if (!commentsData) {
+                commentsList.innerHTML = '<div class="no-comments">No comments yet. Be the first to comment!</div>';
+                return;
+            }
+            
+            const commentsArray = Object.values(commentsData).reverse();
+            
+            commentsList.innerHTML = commentsArray.map(comment => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-author">${comment.name}</span>
+                        <span class="comment-date">${comment.date}</span>
+                    </div>
+                    <div class="comment-text">${comment.text}</div>
+                </div>
+            `).join('');
+        });
+
+        // Post comment
+        document.getElementById('submitComment').addEventListener('click', async function() {
+            const nameInput = document.getElementById('commentName');
+            const textInput = document.getElementById('commentText');
+            
+            const name = nameInput.value.trim();
+            const text = textInput.value.trim();
+            
+            if (!name || !text) {
+                alert('Please fill in both name and comment!');
+                return;
+            }
+            
+            const newCommentRef = push(commentsRef);
+            const newComment = {
+                name: name,
+                text: text,
+                date: new Date().toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                }),
+                timestamp: Date.now()
+            };
+            
+            try {
+                await set(newCommentRef, newComment);
+                nameInput.value = '';
+                textInput.value = '';
+                alert('Comment posted successfully!');
+            } catch (error) {
+                alert('Error posting comment. Please try again.');
+                console.error(error);
+            }
+        });
+
+        // Download Button
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            if (confirm('You are about to download an APK file from GitHub. Make sure to enable "Install from Unknown Sources" in your device settings. Continue?')) {
+                // Increment download count in Firebase
+                try {
+                    const currentCount = await get(downloadCountRef);
+                    await set(downloadCountRef, (currentCount.val() || 0) + 1);
+                } catch (error) {
+                    console.error('Error updating download count:', error);
+                }
+                
+                // Start download
+                window.location.href = 'https://raw.githubusercontent.com/Webgamerstudio/Download-link-generator-AR/main/apks/2025-11-09T02-10-30-_Farm_Zone_19230620.apk';
+            }
+        });
+
+        // Share button
+        document.querySelectorAll('.action-btn')[0].addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'FarmZone - Ad Revenue Sharing',
+                    text: 'Earn by watching ads with FarmZone!',
+                    url: window.location.href
+                });
+            } else {
+                alert('Share this app with your friends!');
+            }
+        });
+
+        // Wishlist button
+        document.querySelectorAll('.action-btn')[1].addEventListener('click', function() {
+            alert('Added to wishlist!');
+        });
+
+        // Ad Load Detection
+        (function() {
+            const adContainer = document.getElementById('adContainer');
+            const checkAd = setInterval(() => {
+                const iframe = adContainer.querySelector('iframe');
+                if (iframe && iframe.offsetHeight > 0) {
+                    adContainer.classList.add('show');
+                    clearInterval(checkAd);
+                }
+            }, 500);
+
+            setTimeout(() => clearInterval(checkAd), 10000);
+        })();
+    </script>
+</body>
+</html>
