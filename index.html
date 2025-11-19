@@ -518,17 +518,8 @@
 
         <!-- Ad Container with Notice -->
         <div id="adNotice" class="ad-notice" style="display: none;">Ad supports our platform</div>
-        <div class="ad-container" id="adContainer">
-            <script type="text/javascript">
-                atOptions = {
-                    'key': '78ade24182729fceea8e45203dad915b',
-                    'format': 'iframe',
-                    'height': 50,
-                    'width': 320,
-                    'params': {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/78ade24182729fceea8e45203dad915b/invoke.js"></script>
+        <div class="ad-container" id="adContainer" style="min-height: 50px;">
+            <div id="adContainerInner"></div>
         </div>
 
         <!-- Action Buttons -->
@@ -826,31 +817,66 @@
             alert('Added to wishlist!');
         });
 
-        // Ad Load Detection - Hide if not loaded
+        // Ad Load Detection - Same as your working code
         (function() {
+            const AD_KEY = '78ade24182729fceea8e45203dad915b';
+            const AD_URL = '//www.highperformanceformat.com/' + AD_KEY + '/invoke.js';
+            let adLoaded = false;
+            
             const adContainer = document.getElementById('adContainer');
             const adNotice = document.getElementById('adNotice');
+            const adContainerInner = document.getElementById('adContainerInner');
             
-            let adCheckCount = 0;
-            const maxChecks = 20; // Check for 10 seconds
+            if (!adContainer || !adContainerInner) return;
             
-            const checkAd = setInterval(() => {
-                adCheckCount++;
+            // Load ad script dynamically
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            
+            script.onload = () => {
+                adLoaded = true;
+                console.log('Ad script loaded successfully');
                 
-                const iframe = adContainer.querySelector('iframe');
-                
-                if (iframe && iframe.offsetHeight > 0) {
-                    // Ad loaded successfully - show it
-                    adContainer.classList.add('show');
-                    adNotice.style.display = 'block';
-                    clearInterval(checkAd);
-                } else if (adCheckCount >= maxChecks) {
-                    // Ad failed to load - keep hidden
+                // Check if ad iframe is rendered
+                setTimeout(() => {
+                    const iframe = adContainer.querySelector('iframe');
+                    if (iframe && iframe.offsetHeight > 0) {
+                        adContainer.classList.add('show');
+                        adNotice.style.display = 'block';
+                        console.log('Ad displayed successfully');
+                    } else {
+                        adContainer.style.display = 'none';
+                        adNotice.style.display = 'none';
+                        console.warn('Ad iframe not found or has zero height');
+                    }
+                }, 1000);
+            };
+            
+            script.onerror = () => {
+                adContainer.style.display = 'none';
+                adNotice.style.display = 'none';
+                console.warn('Ad script failed to load');
+            };
+            
+            // Set ad options globally
+            window.atOptions = {
+                'key': AD_KEY,
+                'format': 'iframe',
+                'height': 50,
+                'width': 320,
+                'params': {}
+            };
+            
+            script.src = AD_URL;
+            adContainerInner.appendChild(script);
+            
+            // Backup check after 10 seconds
+            setTimeout(() => {
+                if (!adLoaded || !adContainer.querySelector('iframe')) {
                     adContainer.style.display = 'none';
                     adNotice.style.display = 'none';
-                    clearInterval(checkAd);
                 }
-            }, 500);
+            }, 10000);
         })();
     </script>
 </body>
