@@ -517,7 +517,7 @@
         </button>
 
         <!-- Ad Container with Notice -->
-        <div class="ad-notice">Ad supports our platform</div>
+        <div id="adNotice" class="ad-notice" style="display: none;">Ad supports our platform</div>
         <div class="ad-container" id="adContainer">
             <script type="text/javascript">
                 atOptions = {
@@ -826,18 +826,31 @@
             alert('Added to wishlist!');
         });
 
-        // Ad Load Detection
+        // Ad Load Detection - Hide if not loaded
         (function() {
             const adContainer = document.getElementById('adContainer');
+            const adNotice = document.getElementById('adNotice');
+            
+            let adCheckCount = 0;
+            const maxChecks = 20; // Check for 10 seconds
+            
             const checkAd = setInterval(() => {
+                adCheckCount++;
+                
                 const iframe = adContainer.querySelector('iframe');
+                
                 if (iframe && iframe.offsetHeight > 0) {
+                    // Ad loaded successfully - show it
                     adContainer.classList.add('show');
+                    adNotice.style.display = 'block';
+                    clearInterval(checkAd);
+                } else if (adCheckCount >= maxChecks) {
+                    // Ad failed to load - keep hidden
+                    adContainer.style.display = 'none';
+                    adNotice.style.display = 'none';
                     clearInterval(checkAd);
                 }
             }, 500);
-
-            setTimeout(() => clearInterval(checkAd), 10000);
         })();
     </script>
 </body>
